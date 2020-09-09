@@ -1,7 +1,9 @@
 package com.security.vividswan.controller;
 
+import com.security.vividswan.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller // return view
@@ -28,17 +30,24 @@ public class IndexController {
         return "admin";
     }
 
-    @GetMapping("/join")
-    public @ResponseBody String join(){
-        return "join";
-    }
-
     @GetMapping("/joinProc")
     public @ResponseBody String joinProc(){
         return "join success";
     }
-    @GetMapping("/login")
-    public @ResponseBody String login(){
-        return "login";
+
+    @GetMapping("/joinForm")
+    public String join(){
+        return "joinForm";
+    }
+
+    @GetMapping("/loginForm")
+    public String loginForm(){
+        return "loginForm";
+    }
+
+    @PostMapping("/join")
+    public @ResponseBody String join(User user){
+        System.out.println();
+        return "join";
     }
 }
