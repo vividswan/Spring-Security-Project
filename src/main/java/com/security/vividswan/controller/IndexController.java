@@ -1,6 +1,9 @@
 package com.security.vividswan.controller;
 
 import com.security.vividswan.model.User;
+import com.security.vividswan.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +11,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller // return view
 public class IndexController {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @GetMapping({"","/"})
     public String index(){
         // mustache : src/main/resources/
@@ -46,8 +56,12 @@ public class IndexController {
     }
 
     @PostMapping("/join")
-    public @ResponseBody String join(User user){
-        System.out.println();
-        return "join";
+    public String join(User user){
+        user.setRole("ROLE_USER");
+        String rawPassword = user.getPassword();
+        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+        user.setPassword(encPassword);
+        userRepository.save(user);
+        return "redirect:/loginForm";
     }
 }
