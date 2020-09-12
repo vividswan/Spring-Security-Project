@@ -15,9 +15,18 @@ import java.util.Map;
 public class PrincipalDetails implements UserDetails, OAuth2User {
     private User user; // composition
 
+    // not OAuth Login
     PrincipalDetails(User user){
         this.user = user;
     }
+
+    // OAuth Login
+    PrincipalDetails(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
+    }
+
+    private Map<String, Object> attributes;
 
     @Override
     public <A> A getAttribute(String name) {
@@ -26,7 +35,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public Map<String, Object> getAttributes() {
-        return null;
+        return attributes;
     }
 
     @Override
