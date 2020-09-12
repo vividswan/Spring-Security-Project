@@ -1,5 +1,7 @@
 package com.security.vividswan.config;
 
+import com.security.vividswan.auth.PrincipalOAuth2UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,6 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    PrincipalOAuth2UserService principalOAuth2UserService;
 
     @Bean
     public BCryptPasswordEncoder encodePwd(){
@@ -34,6 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/")
                 .and()
                 .oauth2Login()
-                .loginPage("/loginForm");
+                .loginPage("/loginForm")
+                .userInfoEndpoint()
+                .userService(principalOAuth2UserService);
     }
 }
