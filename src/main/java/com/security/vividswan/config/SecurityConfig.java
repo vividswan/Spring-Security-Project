@@ -1,6 +1,7 @@
 package com.security.vividswan.config;
 
-import com.security.vividswan.auth.PrincipalOAuth2UserService;
+
+import com.security.vividswan.oauth.PrincipalOAuth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
