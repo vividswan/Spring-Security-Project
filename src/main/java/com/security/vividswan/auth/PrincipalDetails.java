@@ -16,12 +16,12 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     private User user; // composition
 
     // not OAuth Login
-    PrincipalDetails(User user){
+    public PrincipalDetails(User user){
         this.user = user;
     }
 
     // OAuth Login
-    PrincipalDetails(User user, Map<String, Object> attributes) {
+    public PrincipalDetails(User user, Map<String, Object> attributes) {
         this.user = user;
         this.attributes = attributes;
     }
