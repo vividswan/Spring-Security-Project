@@ -2,6 +2,9 @@ package com.security.vividswan.oauth;
 
 import com.security.vividswan.auth.PrincipalDetails;
 import com.security.vividswan.model.User;
+import com.security.vividswan.oauth.provider.FacebookUserInfo;
+import com.security.vividswan.oauth.provider.GoogleUserInfo;
+import com.security.vividswan.oauth.provider.OAuth2UsreInfo;
 import com.security.vividswan.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,11 +28,18 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        String provider = userRequest.getClientRegistration().getClientId();
-        String providerId = oAuth2User.getAttribute("sud");
+        OAuth2UsreInfo userInfo = null;
+        if(userRequest.getClientRegistration().getRegistrationId().equals("google")){
+            userInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+        }else if(userRequest.getClientRegistration().getRegistrationId().equals("facebook")){
+            userInfo = new FacebookUserInfo(oAuth2User.getAttributes());
+        }
+
+        String provider = userInfo.getProvider();
+        String providerId = userInfo.getProviderId();
         String username = provider + "_" + providerId;
         String password = bCryptPasswordEncoder.encode("vividswan");
-        String email = oAuth2User.getAttribute("email");
+        String email =  userInfo.getEmail();
         String role = "ROLE_USER";
 
         User userEntity = userRepository.findByUsername("username");
@@ -42,6 +52,7 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
                     .email(email)
                     .role(role)
                     .build();
+            userRepository.save(userEntity);
         }
 
         return new PrincipalDetails(userEntity, oAuth2User.getAttributes());
