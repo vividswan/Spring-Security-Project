@@ -4,6 +4,7 @@ import com.security.vividswan.auth.PrincipalDetails;
 import com.security.vividswan.model.User;
 import com.security.vividswan.oauth.provider.FacebookUserInfo;
 import com.security.vividswan.oauth.provider.GoogleUserInfo;
+import com.security.vividswan.oauth.provider.NaverUserInfo;
 import com.security.vividswan.oauth.provider.OAuth2UsreInfo;
 import com.security.vividswan.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +15,16 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -33,7 +36,10 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
             userInfo = new GoogleUserInfo(oAuth2User.getAttributes());
         }else if(userRequest.getClientRegistration().getRegistrationId().equals("facebook")){
             userInfo = new FacebookUserInfo(oAuth2User.getAttributes());
+        }else if(userRequest.getClientRegistration().getRegistrationId().equals("naver")){
+            userInfo = new NaverUserInfo((Map) oAuth2User.getAttributes().get("response"));
         }
+
 
         String provider = userInfo.getProvider();
         String providerId = userInfo.getProviderId();
