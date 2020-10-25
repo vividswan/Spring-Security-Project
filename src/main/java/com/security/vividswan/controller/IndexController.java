@@ -1,11 +1,14 @@
 package com.security.vividswan.controller;
 
+import com.security.vividswan.auth.PrincipalDetails;
+import com.security.vividswan.dto.UserInfoDto;
 import com.security.vividswan.model.User;
 import com.security.vividswan.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,14 +26,19 @@ public class IndexController {
 
     @GetMapping({"","/"})
     public String index(){
-        // mustache : src/main/resources/
-        // viewResolver : templates (prefix), .mustache (suffix)
         return "index";
     }
 
     @GetMapping("/user")
-    public @ResponseBody String user(){
-        return "user";
+    public @ResponseBody UserInfoDto user(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        UserInfoDto userInfoDto = UserInfoDto.builder()
+                .id(principalDetails.getUser().getId())
+                .email(principalDetails.getUser().getEmail())
+                .role(principalDetails.getUser().getRole())
+                .providerId(principalDetails.getUser().getProviderId())
+                .createDate(principalDetails.getUser().getCreateDate())
+                .build();
+        return userInfoDto;
     }
 
     @GetMapping("/manager")
