@@ -1,4 +1,4 @@
-# Study-Securit-Project
+# Spring-Securit-Project
 ## Spring Boot(Gradle), Oauth, JPA(MySQL)
 ### Spring Security, Google, Facebook, Naver Login
 - - -
