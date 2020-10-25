@@ -5,7 +5,9 @@
 
 ## 프로젝트 구성
 
-![1](/src/main/resources/static/201026-1.png)<br>
+![1](/src/main/resources/static/201026-1.png)<br><br>
+
+### Class
 ![2](/src/main/resources/static/201026-2.png)<br>
 
 - - -
